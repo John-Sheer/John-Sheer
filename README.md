@@ -29,11 +29,6 @@ John Sheer is a versatile software engineer skilled in C/C++, Python, Java, and 
 <div>
 
             
-
-### summary
-*John Sheer is a versatile software engineer skilled in C/C++, Python, Java, and both frontend and backend development. Passion drives his pursuit of excellence in the world of technology.*
-
-            
 </div>
 
 
