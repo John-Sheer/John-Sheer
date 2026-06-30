@@ -28,34 +28,7 @@ if (isset($_GET['q'])) {
     exit('Invalid query parameter.');
 }
 
-// ==========================
-// CONTACT FORM HANDLER
-// ==========================
-$formSent = false;
-$formError = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['devis'])) {
-    $name    = trim($_POST['name'] ?? '');
-    $email   = trim($_POST['email'] ?? '');
-    $phone   = trim($_POST['phone'] ?? '');
-    $service = trim($_POST['service'] ?? '');
-    $message = trim($_POST['message'] ?? '');
-
-    if ($name && $email && $message) {
-        $to      = 'meskojohn@gmail.com';
-        $subject = "Demande de devis de $name";
-        $body    = "Nom : $name\nEmail : $email\nTéléphone : $phone\nService : $service\n\nMessage :\n$message";
-        $headers = "From: $email\r\nReply-To: $email";
-
-        if (mail($to, $subject, $body, $headers)) {
-            $formSent = true;
-        } else {
-            $formError = "Erreur lors de l'envoi. Réessaie ou contacte-moi directement par email.";
-        }
-    } else {
-        $formError = "Merci de remplir tous les champs obligatoires (nom, email, message).";
-    }
-}
+// (Formspree handled via AJAX in JS)
 
 // ==========================
 // STACK DATA
@@ -65,9 +38,6 @@ $stack = [
     'Backend & data' => ['PHP', 'Firebase', 'Firestore', 'Node.js'],
     'Outils & workflow' => ['Git', 'Vibecoding', 'Python / WeasyPrint', 'VS Code', 'UML', 'Agilité'],
     'Infrastructure' => ['Laragon', 'Firebase Hosting', 'Deno', 'Nginx / Apache'],
-];
-
-$stack_wide = [
     'Réseau & vidéosurveillance' => ['Configuration réseau', 'Câblage structuré', 'Vidéosurveillance CCTV', 'Supervision & maintenance'],
 ];
 ?>
@@ -96,7 +66,6 @@ $stack_wide = [
             --border: rgba(52, 184, 138, 0.2);
             --text: #e9ecf2;
             --muted: #a0aabf;
-            --gold: #34b88a;
             --emerald: #34b88a;
             --radius: 14px;
             --maxw: 1080px;
@@ -122,10 +91,10 @@ $stack_wide = [
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        .accent { color: var(--gold); }
+        .accent { color: var(--emerald); }
 
         :focus-visible {
-            outline: 2px solid var(--gold);
+            outline: 2px solid var(--emerald);
             outline-offset: 3px;
         }
 
@@ -142,7 +111,7 @@ $stack_wide = [
             transform: translateX(-50%);
             z-index: 999;
             padding: 10px 20px;
-            background: var(--gold);
+            background: var(--emerald);
             color: #1a1505;
             border-radius: 0 0 8px 8px;
             font-family: 'JetBrains Mono', 'Consolas', monospace;
@@ -184,9 +153,10 @@ $stack_wide = [
             color: var(--muted);
             margin-left: 10px;
             padding: 3px 8px;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(52, 184, 138, 0.3);
             border-radius: 6px;
             vertical-align: middle;
+            box-shadow: 0 0 10px rgba(52, 184, 138, 0.25), 0 0 25px rgba(52, 184, 138, 0.1);
         }
 
         .nav-links {
@@ -198,10 +168,13 @@ $stack_wide = [
         .nav-links a {
             text-decoration: none;
             color: var(--muted);
-            transition: color 0.2s ease;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
         }
 
-        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover {
+            color: var(--text);
+            text-shadow: 0 0 8px rgba(52, 184, 138, 0.5), 0 0 20px rgba(52, 184, 138, 0.2);
+        }
 
         /* ---------- HERO ---------- */
         .hero {
@@ -222,6 +195,8 @@ $stack_wide = [
             flex-direction: column;
             align-items: center;
             gap: 16px;
+            overflow: visible;
+            z-index: 1;
         }
 
         .photo-frame {
@@ -238,11 +213,14 @@ $stack_wide = [
             background-repeat: no-repeat;
             filter: grayscale(100%) brightness(1.05) contrast(1.05);
             transition: filter 0.4s ease, transform 0.4s ease;
+            transform-origin: top center;
         }
 
         .photo-frame:hover {
             filter: grayscale(0%) brightness(1) contrast(1);
-            transform: scale(1.01);
+            transform: scale(1.7);
+            z-index: 10;
+            position: relative;
         }
 
         .availability {
@@ -472,8 +450,9 @@ $stack_wide = [
         }
 
         .contact-card:hover {
-            border-color: rgba(52, 184, 138, 0.5);
+            border-color: rgba(52, 184, 138, 0.7);
             transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(52, 184, 138, 0.3), 0 0 30px rgba(52, 184, 138, 0.1);
         }
 
         .contact-icon {
@@ -491,7 +470,7 @@ $stack_wide = [
         .contact-icon svg {
             width: 18px;
             height: 18px;
-            stroke: var(--gold);
+            stroke: var(--emerald);
             fill: none;
             stroke-width: 1.8;
         }
@@ -538,7 +517,7 @@ $stack_wide = [
         .form-control {
             width: 100%;
             padding: 12px 14px;
-            background: #0c0c0c;
+            background: #000;
             border: 1px solid rgba(52, 184, 138, 0.3);
             border-radius: 6px;
             color: #ddd;
@@ -558,11 +537,69 @@ $stack_wide = [
             color: rgba(255, 255, 255, 0.15);
         }
 
+        .msg-terminal {
+            border: 1px solid rgba(52, 184, 138, 0.3);
+            background: #000;
+        }
+
+        .msg-terminal .form-control {
+            border: none;
+            background: transparent;
+        }
+
+        .msg-terminal .form-control:focus {
+            border-color: transparent;
+        }
+
+        .msg-prompt {
+            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            color: #8ce;
+            white-space: pre;
+            letter-spacing: 0;
+            padding: 10px 14px 0;
+            display: none;
+        }
+        .msg-prompt.visible { display: block; }
+
+        .prompt-cmd {
+            color: #e55;
+        }
+
+        .msg-wrap {
+            position: relative;
+        }
+
+        .msg-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            padding: 8px 14px 10px;
+            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.4;
+            color: #fff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden;
+            pointer-events: none;
+            letter-spacing: 0;
+        }
+
+        .msg-overlay .cursor {
+            color: #e55;
+        }
+
         .message-editor {
-            min-height: 120px;
-            line-height: 1.55;
-            resize: vertical;
+            min-height: 56px;
+            line-height: 1.4;
+            resize: none;
             border-radius: 0;
+            color: transparent;
+            caret-color: transparent;
+            overflow: hidden;
+            padding: 8px 14px 10px;
+            position: relative;
+            background: transparent;
         }
 
         .form .btn-primary {
@@ -594,16 +631,6 @@ $stack_wide = [
             margin: 0;
         }
 
-        .form-error {
-            color: #e55;
-            font-size: 0.85rem;
-            margin: 0 0 16px;
-            padding: 10px 14px;
-            background: rgba(238, 85, 85, 0.1);
-            border: 1px solid rgba(238, 85, 85, 0.3);
-            border-radius: 8px;
-        }
-
         @media (max-width: 680px) {
             .form-row { grid-template-columns: 1fr; }
         }
@@ -633,7 +660,7 @@ $stack_wide = [
         .modal-overlay.active { display: flex; }
 
         .modal {
-            background: #0c0c0c;
+            background: #000;
             border: 1px solid rgba(52, 184, 138, 0.35);
             border-radius: 6px;
             padding: 28px 32px 20px;
@@ -750,17 +777,8 @@ $stack_wide = [
     <h2 class="section-title reveal">Compétences <span class="mono accent">/ ce que je fais</span></h2>
     <div class="stack-grid">
         <?php $r = 1; foreach ($stack as $category => $items): ?>
-            <div class="stack-card reveal reveal-delay-<?= min($r++, 4); ?>">
-                <h3><?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?></h3>
-                <div class="tags">
-                    <?php foreach ($items as $item): ?>
-                        <span class="tag"><?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8'); ?></span>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
-        <?php foreach ($stack_wide as $category => $items): ?>
-            <div class="stack-card reveal reveal-delay-4" style="grid-column: 1 / -1;">
+            <?php $wide = ($category === 'Réseau & vidéosurveillance'); ?>
+            <div class="stack-card reveal reveal-delay-<?= min($r++, 4); ?>"<?= $wide ? ' style="grid-column:1/-1;"' : ''; ?>>
                 <h3><?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?></h3>
                 <div class="tags">
                     <?php foreach ($items as $item): ?>
@@ -775,20 +793,7 @@ $stack_wide = [
 <section id="devis">
     <h2 class="section-title reveal">Demande de devis <span class="mono accent">/ gratuit</span></h2>
 
-    <?php if ($formSent): ?>
-        <div class="form reveal reveal-delay-1">
-            <div class="form-success">
-                <div class="emoji">✓</div>
-                <h3>Message envoyé !</h3>
-                <p>Je te réponds sous 24h. À très vite !</p>
-                <a href="/" class="btn btn-primary" style="margin-top: 20px;">OK</a>
-            </div>
-        </div>
-    <?php else: ?>
-        <form class="form reveal reveal-delay-1" method="post" action="#devis">
-            <?php if ($formError): ?>
-                <div class="form-error"><?= htmlspecialchars($formError, ENT_QUOTES, 'UTF-8'); ?></div>
-            <?php endif; ?>
+        <form class="form reveal reveal-delay-1" id="devisForm" method="post" action="https://formspree.io/f/mgojlwdk">
 
             <div class="form-row">
                 <div class="form-group">
@@ -823,12 +828,17 @@ $stack_wide = [
 
             <div class="form-group">
                 <label for="message">Message *</label>
-                <textarea class="form-control message-editor" id="message" name="message" placeholder="Décris ton projet..." required><?= htmlspecialchars($_POST['message'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                <div class="msg-terminal">
+                    <div class="msg-prompt" id="msgPrompt"><span class="prompt-label">PS C:\John-Sheer\Devis\votreNom&gt;</span><span class="prompt-cmd"></span></div>
+                    <div class="msg-wrap">
+                        <div class="msg-overlay" id="msgOverlay"></div>
+                        <textarea class="form-control message-editor" id="message" name="message" placeholder="Décris ton projet..." required><?= htmlspecialchars($_POST['message'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                </div>
             </div>
 
-            <button class="btn btn-primary" type="submit" name="devis">Envoyer la demande</button>
+            <button class="btn btn-primary" type="submit">Envoyer la demande</button>
         </form>
-    <?php endif; ?>
 </section>
 
 <section id="contact">
@@ -1002,33 +1012,140 @@ $stack_wide = [
             });
             navLinks.forEach(function (l) { l.style.color = ''; });
             var active = document.querySelector('.nav-links a[href="#' + current + '"]');
-            if (active) active.style.color = 'var(--gold)';
+            if (active) active.style.color = 'var(--emerald)';
         }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
         sections.forEach(function (s) { navObserver.observe(s.el); });
     }
 
-    // ── Keyboard sound for message field ──
-    var msgField = document.getElementById('message');
-    if (msgField) {
-        var audioCtx;
-        document.addEventListener('click', function init() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            document.removeEventListener('click', init);
-        }, { once: true });
-        msgField.addEventListener('keydown', function () {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            var osc = audioCtx.createOscillator();
-            var gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 800;
-            osc.type = 'square';
-            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.06);
+    // ── PowerShell prompt for message field ──
+    var msgField2 = document.getElementById('message');
+    var nameField = document.getElementById('name');
+    var msgPrompt = document.getElementById('msgPrompt');
+    var promptLabel = document.querySelector('.prompt-label');
+    var promptCmd = document.querySelector('.prompt-cmd');
+
+    function autoResize(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    }
+
+    function updateMsgPrompt() {
+        var name = nameField ? nameField.value.trim().replace(/\s+/g, '_') || 'votreNom' : 'votreNom';
+        var typed = msgField2 ? msgField2.value : '';
+        promptLabel.textContent = 'PS C:\\John-Sheer\\Devis\\' + name + '> ';
+        promptCmd.textContent = typed ? ' message' : '';
+    }
+
+    // ── Overlay cursor for message field ──
+    var msgOverlay = document.getElementById('msgOverlay');
+
+    function msgRenderOverlay() {
+        var val = msgField2.value;
+        var html;
+        if (!val && document.activeElement !== msgField2) {
+            html = '<span style="color:rgba(255,255,255,0.15)">Décris ton projet...</span>';
+        } else {
+            html = escapeHtml(val);
+            if (document.activeElement === msgField2) {
+                html += '<span class="cursor">\u2581</span>';
+            }
+        }
+        msgOverlay.innerHTML = html;
+    }
+
+    function escapeHtml(s) {
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    if (msgField2 && msgOverlay) {
+        autoResize(msgField2);
+        msgField2.addEventListener('focus', function () {
+            updateMsgPrompt();
+            msgPrompt.classList.add('visible');
+            msgRenderOverlay();
+            autoResize(msgField2);
+        });
+        msgField2.addEventListener('blur', function () {
+            msgRenderOverlay();
+            if (!msgField2.value.trim()) {
+                msgPrompt.classList.remove('visible');
+            }
+            autoResize(msgField2);
+        });
+        msgField2.addEventListener('input', function () {
+            msgRenderOverlay();
+            updateMsgPrompt();
+            autoResize(msgField2);
+        });
+        nameField.addEventListener('input', function () {
+            if (msgPrompt.classList.contains('visible')) updateMsgPrompt();
+        });
+        msgRenderOverlay();
+    }
+
+    // ── Keyboard sound for all form fields ──
+    var audioCtx;
+    document.addEventListener('click', function init() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        document.removeEventListener('click', init);
+    }, { once: true });
+
+    function playKeySound() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = 800;
+        osc.type = 'square';
+        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.06);
+    }
+
+    var devisForm = document.querySelector('#devis form');
+    if (devisForm) {
+        devisForm.addEventListener('keydown', function (e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+                playKeySound();
+            }
+        });
+
+        // ── AJAX submit to Formspree ──
+        devisForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var btn = devisForm.querySelector('button[type="submit"]');
+            btn.textContent = 'Envoi en cours…';
+            btn.disabled = true;
+            fetch(devisForm.action, {
+                method: 'POST',
+                body: new FormData(devisForm),
+                headers: { 'Accept': 'application/json' }
+            }).then(function (r) { return r.json(); }).then(function (data) {
+                if (data.ok) {
+                    devisForm.innerHTML =
+                        '<div class="form-success">' +
+                            '<div class="emoji">✓</div>' +
+                            '<h3>Message envoyé !</h3>' +
+                            '<p>Je te réponds sous 24h. À très vite !</p>' +
+                            '<button class="btn btn-primary" id="resetDevis">Soumettre un devis</button>' +
+                        '</div>';
+                    document.getElementById('resetDevis').addEventListener('click', function () {
+                        location.reload();
+                    });
+                } else {
+                    btn.textContent = 'Réessaie';
+                    btn.disabled = false;
+                    alert("Erreur : " + (data.error || "Réessaie plus tard."));
+                }
+            }).catch(function () {
+                btn.textContent = 'Réessaie';
+                btn.disabled = false;
+                alert("Erreur réseau. Réessaie.");
+            });
         });
     }
 
@@ -1056,13 +1173,7 @@ $stack_wide = [
         if (e.key === 'Escape') closeModal();
     });
 
-    // ── Scroll to devis section after form submission ──
-    <?php if ($formSent): ?>
-    window.addEventListener('load', function () {
-        var el = document.getElementById('devis');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-    });
-    <?php endif; ?>
+
 
 })();
 </script>
