@@ -120,7 +120,7 @@ $stack = [
         .wordmark {
             font-family: 'Segoe UI', 'Tahoma', sans-serif;
             font-weight: 700;
-            font-size: 4rem;
+            font-size: 2.8rem;
             letter-spacing: -0.02em;
             color: #34b88a;
         }
@@ -776,7 +776,7 @@ $stack = [
 
         /* Adaptations mobiles */
         @media (max-width: 680px) {
-            .wordmark { font-size: 2.6rem; }
+            .wordmark { font-size: 1.8rem; }
             .founder-tag { font-size: 0.7rem; padding: 2px 6px; margin-left: 6px; }
             .nav-inner { padding: 12px 16px; }
             .nav-links { gap: 14px; font-size: 0.85rem; }
