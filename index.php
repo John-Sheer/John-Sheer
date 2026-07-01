@@ -970,7 +970,7 @@ $stack = [
     // ── Terminal typing animation ──
     var cmds = [
         { cmd: 'whoami',            out: 'John-Sheer — développeur full-stack et technicien réseau &amp; vidéosurveillance' },
-        { cmd: 'skills --list',     out: 'full-stack · réseau · vidéosurveillance · vibecoding' },
+        { cmd: 'skills --list',     out: 'full-stack · réseau · vidéosurveillance' },
         { cmd: 'compétences',       out: 'React · Vite · JavaScript / TypeScript · PHP · PowerShell · Git · Python · UML · Agilité' },
     ];
     var idx = 0;
@@ -1324,13 +1324,6 @@ $stack = [
             frame.classList.remove('hover-active');
         });
     })();
-
-    // Resume AudioContext when tab becomes visible again
-    document.addEventListener('visibilitychange', function () {
-        if (!document.hidden && window.audioCtx && window.audioCtx.state === 'suspended') {
-            window.audioCtx.resume();
-        }
-    });
 
 })();
 </script>
