@@ -235,7 +235,7 @@ $stack = [
             background: #000;
             margin-bottom: 40px;
             font-family: 'Consolas', monospace;
-            height: 200px;
+            height: 140px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
