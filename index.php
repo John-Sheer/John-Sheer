@@ -999,7 +999,7 @@ $stack = [
                 cmdSpan.textContent = typedCmd;
                 if (isConsoleVisible()) playKeySound();
                 pos++;
-                setTimeout(typeCmd, 80 + Math.random() * 60);
+                setTimeout(typeCmd, 140 + Math.random() * 100);
             } else {
                 pos = 0;
                 setTimeout(typeOut, 200);
@@ -1012,7 +1012,7 @@ $stack = [
                 outSpan.innerHTML = typedOut + '<span class="cursor blink">_</span>';
                 if (isConsoleVisible()) playKeySound();
                 pos++;
-                setTimeout(typeOut, 40 + Math.random() * 40);
+                setTimeout(typeOut, 80 + Math.random() * 60);
             }
         }
 
@@ -1021,7 +1021,10 @@ $stack = [
 
     if (termBody) {
         typeCommand(0);
+        var animPaused = false;
         setInterval(function () {
+            if (!isConsoleVisible()) { animPaused = true; return; }
+            if (animPaused) { animPaused = false; typeCommand(idx); return; }
             idx = (idx + 1) % cmds.length;
             typeCommand(idx);
         }, 13000);
