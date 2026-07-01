@@ -1,44 +1,10 @@
 <?php
-// ==========================
-// BASIC ENV DETECTION
-// ==========================
-$isLocal = in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'], true);
-
-// ==========================
-// QUERY HANDLING (SAFE)
-// ==========================
-if (isset($_GET['q'])) {
-    $query = $_GET['q'];
-
-    // Allow-list approach
-    if ($query === 'info') {
-
-        // phpinfo allowed ONLY on localhost
-        if ($isLocal) {
-            phpinfo();
-            exit;
-        }
-
-        http_response_code(403);
-        exit('Forbidden! phpinfo allowed ONLY on localhost');
-    }
-
-    // Unknown query
-    http_response_code(404);
-    exit('Invalid query parameter.');
-}
-
-// (Formspree handled via AJAX in JS)
-
-// ==========================
-// STACK DATA
-// ==========================
 $stack = [
-    'Frontend' => ['React', 'Vite', 'Tailwind CSS', 'JavaScript / TypeScript'],
-    'Backend & data' => ['PHP', 'Firebase', 'Firestore', 'Node.js'],
-    'Outils & workflow' => ['Git', 'Vibecoding', 'Python / WeasyPrint', 'VS Code', 'UML', 'Agilité'],
+    'Frontend' => ['React', 'Vite', 'Tailwind CSS', 'JavaScript / TypeScript', 'HTML5 / CSS3', 'Responsive Design'],
+    'Backend & data' => ['PHP', 'Firebase', 'Firestore', 'Node.js', 'JavaScript', 'REST APIs', 'SQL / MySQL'],
+    'Outils & workflow' => ['Git', 'Python / WeasyPrint', 'VS Code', 'UML', 'Agilité', 'Docker', 'npm / yarn', 'Markdown'],
     'Infrastructure' => ['Laragon', 'Firebase Hosting', 'Deno', 'Nginx / Apache'],
-    'Réseau & vidéosurveillance' => ['Configuration réseau', 'Câblage structuré', 'Vidéosurveillance CCTV', 'Supervision & maintenance'],
+    'Réseau & vidéosurveillance' => [['Configuration réseau', ['VPN', 'Firewall']], 'Câblage structuré', 'Packet Tracer', 'GNS3', 'Supervision & maintenance'],
 ];
 ?>
 
@@ -54,9 +20,7 @@ $stack = [
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0e14'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23d8b36b' font-family='monospace' font-weight='bold'%3EJS%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0e14'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23d8b36b' font-family='monospace' font-weight='bold'%3EJS%3C/text%3E%3C/svg%3E">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://formspree.io; form-action https://formspree.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; frame-ancestors 'none'; font-src 'self'">
 
     <style>
         :root {
@@ -82,14 +46,14 @@ $stack = [
                 radial-gradient(circle at 15% 0%, rgba(216, 179, 107, 0.07), transparent 45%),
                 radial-gradient(circle at 85% 20%, rgba(52, 184, 138, 0.06), transparent 40%);
             color: var(--text);
-            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-family: 'Consolas', monospace;
             line-height: 1.55;
             -webkit-font-smoothing: antialiased;
         }
 
         a { color: inherit; }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
+        .mono { font-family: monospace; }
 
         .accent { color: var(--emerald); }
 
@@ -114,7 +78,7 @@ $stack = [
             background: var(--emerald);
             color: #1a1505;
             border-radius: 0 0 8px 8px;
-            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-family: 'Consolas', monospace;
             font-size: 0.9rem;
             text-decoration: none;
             transition: top 0.2s ease;
@@ -141,14 +105,15 @@ $stack = [
         }
 
         .wordmark {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
             font-weight: 700;
-            font-size: 1.4rem;
+            font-size: 2rem;
             letter-spacing: -0.02em;
+            color: #34b88a;
         }
 
         .founder-tag {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.85rem;
             color: var(--muted);
             margin-left: 10px;
@@ -181,6 +146,7 @@ $stack = [
             max-width: var(--maxw);
             margin: 0 auto;
             padding: 30px 24px 24px;
+            scroll-margin-top: 80px;
         }
 
         .hero-grid {
@@ -227,36 +193,39 @@ $stack = [
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.78rem;
-            color: var(--emerald);
+            color: #fff;
             background: rgba(52, 184, 138, 0.1);
             border: 1px solid rgba(52, 184, 138, 0.3);
             border-radius: 8px;
             padding: 6px 12px;
+            box-shadow: 0 0 10px rgba(52, 184, 138, 0.25), 0 0 25px rgba(52, 184, 138, 0.1);
+            position: relative;
+            z-index: 20;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+        .availability:hover {
+            background: rgba(52, 184, 138, 0.2);
+            box-shadow: 0 0 14px rgba(52, 184, 138, 0.4), 0 0 35px rgba(52, 184, 138, 0.15);
         }
 
         .eyebrow {
             color: var(--emerald);
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             letter-spacing: 0.04em;
-            margin: 0 0 18px;
+            margin: 0 0 14px;
         }
 
         .hero-title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
             font-weight: 700;
-            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-size: clamp(1.7rem, 4.5vw, 2.8rem);
             line-height: 1.04;
             letter-spacing: -0.02em;
             margin: 0 0 22px;
-        }
-
-        .hero-sub {
-            max-width: 540px;
-            color: var(--muted);
-            font-size: 1.08rem;
-            margin: 0 0 40px;
         }
 
         .terminal {
@@ -265,7 +234,7 @@ $stack = [
             border-radius: 0;
             background: #000;
             margin-bottom: 40px;
-            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-family: 'Consolas', monospace;
         }
 
         .terminal-title {
@@ -285,7 +254,7 @@ $stack = [
 
         .terminal-body p {
             margin: 0 0 3px;
-            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-family: 'Consolas', monospace;
             line-height: 1.5;
         }
 
@@ -303,11 +272,6 @@ $stack = [
         }
 
         @keyframes blink { 50% { opacity: 0; } }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
 
         .reveal {
             opacity: 0;
@@ -335,7 +299,7 @@ $stack = [
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.78rem;
             padding: 7px 14px;
             border-radius: 8px;
@@ -365,30 +329,30 @@ $stack = [
         section {
             max-width: var(--maxw);
             margin: 0 auto;
-            padding: 70px 24px;
+            padding: 50px 24px 70px;
             border-top: 1px solid var(--border);
-            scroll-margin-top: 80px;
+            scroll-margin-top: 75px;
         }
 
         .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-size: 1.6rem;
             font-weight: 600;
-            margin: 0 0 36px;
+            margin: 0 0 20px;
         }
 
         /* ---------- STACK GRID ---------- */
         .stack-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
+            gap: 12px;
         }
 
         .stack-card {
             background: var(--panel);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
+            padding: 16px;
             transition: border-color 0.2s ease, transform 0.2s ease;
         }
 
@@ -398,26 +362,26 @@ $stack = [
         }
 
         .stack-card h3 {
-            margin: 0 0 14px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.02rem;
+            margin: 0 0 10px;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-size: 1rem;
             font-weight: 600;
         }
 
         .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
 
         .tag {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.78rem;
             color: var(--muted);
             background: var(--panel-2);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 5px 9px;
+            border-radius: 5px;
+            padding: 3px 7px;
         }
 
         .dot {
@@ -483,7 +447,7 @@ $stack = [
         }
 
         .contact-val {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.92rem;
             word-break: break-word;
         }
@@ -505,7 +469,7 @@ $stack = [
             font-size: 0.85rem;
             color: var(--muted);
             margin-bottom: 6px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
         }
 
         .form-row {
@@ -521,7 +485,7 @@ $stack = [
             border: 1px solid rgba(52, 184, 138, 0.3);
             border-radius: 6px;
             color: #ddd;
-            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-family: 'Consolas', monospace;
             font-size: 0.88rem;
             caret-color: #e55;
             transition: border-color 0.2s ease;
@@ -531,6 +495,71 @@ $stack = [
         .form-control:focus {
             outline: none;
             border-color: rgba(52, 184, 138, 0.6);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+
+        .custom-select {
+            position: relative;
+        }
+
+        .select-trigger {
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .select-trigger::after {
+            content: '\25BC';
+            font-size: 0.6rem;
+            color: var(--muted);
+            margin-left: 8px;
+        }
+
+        .select-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            margin: 2px 0 0;
+            padding: 4px 0;
+            list-style: none;
+            background: #000;
+            border: 1px solid rgba(52, 184, 138, 0.3);
+            border-radius: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .select-menu.open { display: block; }
+
+        .select-menu li {
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: #ddd;
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .select-menu li:hover {
+            color: #34b88a;
+        }
+
+        .select-menu li.selected {
+            color: #34b88a;
         }
 
         .form-control::placeholder {
@@ -552,7 +581,7 @@ $stack = [
         }
 
         .msg-prompt {
-            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-family: 'Consolas', monospace;
             font-size: 0.88rem;
             color: #8ce;
             white-space: pre;
@@ -574,7 +603,7 @@ $stack = [
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             padding: 8px 14px 10px;
-            font-family: 'Consolas', 'JetBrains Mono', monospace;
+            font-family: 'Consolas', monospace;
             font-size: 0.88rem;
             line-height: 1.4;
             color: #fff;
@@ -604,7 +633,7 @@ $stack = [
 
         .form .btn-primary {
             cursor: pointer;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.82rem;
             padding: 9px 18px;
         }
@@ -620,7 +649,7 @@ $stack = [
         }
 
         .form-success h3 {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
             font-size: 1.3rem;
             margin: 0 0 8px;
             color: var(--emerald);
@@ -685,7 +714,7 @@ $stack = [
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.85rem;
             color: var(--emerald);
             background: rgba(52, 184, 138, 0.1);
@@ -701,7 +730,7 @@ $stack = [
         .modal-btn svg { stroke: var(--emerald); fill: none; stroke-width: 1.8; }
 
         .modal-close {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 0.78rem;
             color: var(--muted);
             background: none;
@@ -740,7 +769,7 @@ $stack = [
 <a class="skip-link" href="#stack">Aller au contenu</a>
 <nav class="nav">
     <div class="nav-inner">
-        <span class="wordmark">John-Sheer<span class="founder-tag"> SheerTech</span></span>
+        <a href="#accueil" class="wordmark" style="text-decoration:none">John-Sheer<span class="founder-tag"> SheerTech</span></a>
         <div class="nav-links">
             <a href="#stack">Stack</a>
             <a href="#devis">Devis</a>
@@ -749,10 +778,10 @@ $stack = [
     </div>
 </nav>
 
-<header class="hero">
+<header class="hero" id="accueil">
     <div class="hero-grid">
         <div>
-            <p class="eyebrow mono">// portfolio personnel</p>
+            <p class="eyebrow mono">// portfolio</p>
             <h1 class="hero-title">Code.<br>Réseau.<br>Vidéo protection.</h1>
 
             <div class="terminal">
@@ -768,7 +797,7 @@ $stack = [
 
         <div class="hero-photo-wrap">
             <div class="photo-frame" role="img" aria-label="Portrait de John-Sheer"></div>
-            <span class="availability"><span class="dot"></span>disponible pour projets</span>
+            <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
         </div>
     </div>
 </header>
@@ -782,7 +811,12 @@ $stack = [
                 <h3><?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?></h3>
                 <div class="tags">
                     <?php foreach ($items as $item): ?>
-                        <span class="tag"><?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8'); ?></span>
+                        <?php if (is_array($item)): ?>
+                            <?php $children = implode(', ', array_map(function ($c) { return htmlspecialchars($c, ENT_QUOTES, 'UTF-8'); }, $item[1])); ?>
+                            <span class="tag"><?= htmlspecialchars($item[0], ENT_QUOTES, 'UTF-8'); ?> &gt; <?= $children; ?></span>
+                        <?php else: ?>
+                            <span class="tag"><?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8'); ?></span>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -798,31 +832,38 @@ $stack = [
             <div class="form-row">
                 <div class="form-group">
                     <label for="name">Nom *</label>
-                    <input class="form-control" type="text" id="name" name="name" placeholder="John" required
-                           value="<?= htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                    <input class="form-control" type="text" id="name" name="name" placeholder="John" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email *</label>
-                    <input class="form-control" type="email" id="email" name="email" placeholder="exemple@gmail.com" required
-                           value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                    <input class="form-control" type="email" id="email" name="email" placeholder="exemple@gmail.com" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="phone">Téléphone</label>
-                    <input class="form-control" type="tel" id="phone" name="phone" placeholder="+228 XX XX XX XX"
-                           value="<?= htmlspecialchars($_POST['phone'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                    <input class="form-control" type="tel" id="phone" name="phone" placeholder="+228 XX XX XX XX">
                 </div>
                 <div class="form-group">
                     <label for="service">Service souhaité</label>
-                    <select class="form-control" id="service" name="service">
-                        <option value="">— Sélectionne —</option>
-                        <option value="Développement web" <?= ($_POST['service'] ?? '') === 'Développement web' ? 'selected' : ''; ?>>Développement web</option>
-                        <option value="Réseau / Vidéosurveillance" <?= ($_POST['service'] ?? '') === 'Réseau / Vidéosurveillance' ? 'selected' : ''; ?>>Réseau / Vidéosurveillance</option>
-                        <option value="Maintenance" <?= ($_POST['service'] ?? '') === 'Maintenance' ? 'selected' : ''; ?>>Maintenance</option>
-                        <option value="Autre" <?= ($_POST['service'] ?? '') === 'Autre' ? 'selected' : ''; ?>>Autre</option>
-                    </select>
+                    <div class="custom-select">
+                        <select class="form-control sr-only" id="service" name="service">
+                            <option value="">— Sélectionne —</option>
+                            <option value="Développement web">Développement web</option>
+                            <option value="Réseau / Vidéosurveillance">Réseau / Vidéosurveillance</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                        <button class="form-control select-trigger" type="button" id="selectTrigger">— Sélectionne —</button>
+                        <ul class="select-menu" id="selectMenu">
+                            <li data-value="">— Sélectionne —</li>
+                            <li data-value="Développement web">Développement web</li>
+                            <li data-value="Réseau / Vidéosurveillance">Réseau / Vidéosurveillance</li>
+                            <li data-value="Maintenance">Maintenance</li>
+                            <li data-value="Autre">Autre</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -832,7 +873,7 @@ $stack = [
                     <div class="msg-prompt" id="msgPrompt"><span class="prompt-label">PS C:\John-Sheer\Devis\votreNom&gt;</span><span class="prompt-cmd"></span></div>
                     <div class="msg-wrap">
                         <div class="msg-overlay" id="msgOverlay"></div>
-                        <textarea class="form-control message-editor" id="message" name="message" placeholder="Décris ton projet..." required><?= htmlspecialchars($_POST['message'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                        <textarea class="form-control message-editor" id="message" name="message" placeholder="Décris ton projet..." required></textarea>
                     </div>
                 </div>
             </div>
@@ -1146,6 +1187,34 @@ $stack = [
                 btn.disabled = false;
                 alert("Erreur réseau. Réessaie.");
             });
+        });
+    }
+
+    // ── Custom select ──
+    var trigger = document.getElementById('selectTrigger');
+    var menu = document.getElementById('selectMenu');
+    var nativeSelect = document.getElementById('service');
+    if (trigger && menu && nativeSelect) {
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menu.classList.toggle('open');
+        });
+        menu.querySelectorAll('li').forEach(function (li) {
+            li.addEventListener('click', function () {
+                var val = li.getAttribute('data-value');
+                var text = li.textContent;
+                nativeSelect.value = val;
+                trigger.textContent = text;
+                menu.querySelectorAll('li').forEach(function (l) { l.classList.remove('selected'); });
+                li.classList.add('selected');
+                menu.classList.remove('open');
+            });
+        });
+        document.addEventListener('click', function () {
+            menu.classList.remove('open');
+        });
+        menu.addEventListener('click', function (e) {
+            e.stopPropagation();
         });
     }
 
