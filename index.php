@@ -235,6 +235,13 @@ $stack = [
             background: #000;
             margin-bottom: 40px;
             font-family: 'Consolas', monospace;
+            max-height: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+        .terminal-body {
+            flex: 1 1 auto;
+            min-height: 0;
         }
 
         .terminal-title {
@@ -250,7 +257,6 @@ $stack = [
             padding: 14px 16px 16px;
             font-size: 0.88rem;
             min-height: 150px;
-            max-height: 350px;
             overflow-y: auto;
         }
 
