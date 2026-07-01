@@ -998,6 +998,10 @@ $stack = [
         p2.innerHTML = '<span class="cursor blink">_</span>';
         termBody.appendChild(p1);
         termBody.appendChild(p2);
+        while (termBody.children.length > 6) {
+            termBody.removeChild(termBody.children[0]);
+            termBody.removeChild(termBody.children[0]);
+        }
         termBody.scrollTop = termBody.scrollHeight;
 
         var cmdSpan = p1.querySelector('.cmd');
