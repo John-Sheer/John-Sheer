@@ -111,7 +111,7 @@ $stack = [
         .nav-inner {
             max-width: var(--maxw);
             margin: 0 auto;
-            padding: 18px 24px;
+            padding: 8px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -120,7 +120,7 @@ $stack = [
         .wordmark {
             font-family: 'Segoe UI', 'Tahoma', sans-serif;
             font-weight: 700;
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             letter-spacing: -0.02em;
             color: #34b88a;
         }
@@ -260,7 +260,7 @@ $stack = [
             background: #000;
             margin-bottom: 40px;
             font-family: 'Consolas', monospace;
-            height: 170px;
+            height: 150px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -776,9 +776,9 @@ $stack = [
 
         /* Adaptations mobiles */
         @media (max-width: 680px) {
-            .wordmark { font-size: 1.8rem; }
+            .wordmark { font-size: 1.4rem; }
             .founder-tag { font-size: 0.7rem; padding: 2px 6px; margin-left: 6px; }
-            .nav-inner { padding: 12px 16px; }
+            .nav-inner { padding: 6px 16px; }
             .nav-links { gap: 14px; font-size: 0.85rem; }
             .hero-grid { grid-template-columns: 1fr; gap: 32px; }
             .hero-photo-wrap { order: -1; }
@@ -824,7 +824,7 @@ $stack = [
 <!-- Navigation principale sticky -->
 <nav class="nav">
     <div class="nav-inner">
-        <a href="#accueil" class="wordmark" style="text-decoration:none">John-Sheer<span class="founder-tag"> SheerTech</span></a>
+        <a href="#accueil" class="wordmark" style="text-decoration:none">Portfolio<span class="founder-tag"> SheerTech</span></a>
         <button class="burger" id="burgerBtn" aria-label="Menu">☰</button>
         <div class="nav-links" id="navLinks">
             <a href="#stack">Stack</a>
@@ -838,7 +838,7 @@ $stack = [
 <header class="hero" id="accueil">
     <div class="hero-grid">
         <div>
-            <p class="eyebrow mono">// portfolio</p>
+            <p class="eyebrow mono">// John-Sheer MENSAH</p>
             <h1 class="hero-title">Code.<br>Réseau.<br>Vidéo protection.</h1>
 
             <!-- Terminal animé — 3 commandes powershell -->
