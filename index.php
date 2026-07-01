@@ -866,7 +866,7 @@ $stack = [
             <div class="form-row">
                 <div class="form-group">
                     <label for="phone">Téléphone</label>
-                    <input class="form-control" type="tel" id="phone" name="phone" placeholder="+228 XX XX XX XX">
+                    <input class="form-control" type="tel" id="phone" name="phone" placeholder="+228 XX XX XX XX" pattern="[0-9+\s]*" title="Chiffres et + uniquement">
                 </div>
                 <div class="form-group">
                     <label for="service">Service souhaité</label>
@@ -1239,6 +1239,14 @@ $stack = [
                 btn.disabled = false;
                 alert("Erreur réseau. Réessaie.");
             });
+        });
+    }
+
+    /* ── Filtre téléphone : chiffres et + uniquement ── */
+    const phoneField = document.getElementById('phone');
+    if (phoneField) {
+        phoneField.addEventListener('input', () => {
+            phoneField.value = phoneField.value.replace(/[^0-9+]/g, '');
         });
     }
 
