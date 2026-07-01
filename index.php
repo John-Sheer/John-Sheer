@@ -235,10 +235,10 @@ $stack = [
             background: #000;
             margin-bottom: 40px;
             font-family: 'Consolas', monospace;
-            height: 420px;
+            max-height: 410px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
         .terminal-title {
             flex: 0 0 auto;
