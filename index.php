@@ -1,4 +1,16 @@
 <?php
+/* Redirection HTTPS — à activer une fois le certificat Let's Encrypt installé */
+if (!isset($_SERVER['HTTPS']) && strpos($_SERVER['HTTP_HOST'], 'localhost') === false) {
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], true, 301);
+    exit;
+}
+
+/* En-têtes de sécurité */
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('X-Frame-Options: DENY');
+
+/* Données des compétences — affichées dans la grille Stack */
 $stack = [
     'Frontend' => ['React', 'Vite', 'Tailwind CSS', 'JavaScript / TypeScript', 'HTML5 / CSS3', 'Responsive Design'],
     'Backend & data' => ['PHP', 'Firebase', 'Firestore', 'Node.js', 'JavaScript', 'REST APIs', 'SQL / MySQL'],
@@ -20,9 +32,10 @@ $stack = [
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0e14'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23d8b36b' font-family='monospace' font-weight='bold'%3EJS%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0e14'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23d8b36b' font-family='monospace' font-weight='bold'%3EJS%3C/text%3E%3C/svg%3E">
 
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://formspree.io; form-action https://formspree.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; frame-ancestors 'none'; font-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src https://formspree.io; form-action https://formspree.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; font-src 'self'">
 
     <style>
+        /* Variables de couleur et espacement */
         :root {
             --bg: #08080b;
             --panel: #08080b;
@@ -35,10 +48,11 @@ $stack = [
             --maxw: 1080px;
         }
 
+        /* Reset de base */
         * { box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
 
+        /* Corps de page — fond sombre, grilles radiales */
         body {
             margin: 0;
             background: var(--bg);
@@ -51,10 +65,9 @@ $stack = [
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Utilitaires */
         a { color: inherit; }
-
         .mono { font-family: monospace; }
-
         .accent { color: var(--emerald); }
 
         :focus-visible {
@@ -67,7 +80,7 @@ $stack = [
             color: var(--text);
         }
 
-        /* ---------- SKIP LINK ---------- */
+        /* Lien d'évitement — accessibilité */
         .skip-link {
             position: absolute;
             top: -100%;
@@ -85,7 +98,7 @@ $stack = [
         }
         .skip-link:focus { top: 0; }
 
-        /* ---------- NAV ---------- */
+        /* Barre de navigation collante */
         .nav {
             position: sticky;
             top: 0;
@@ -141,7 +154,7 @@ $stack = [
             text-shadow: 0 0 8px rgba(52, 184, 138, 0.5), 0 0 20px rgba(52, 184, 138, 0.2);
         }
 
-        /* ---------- HERO ---------- */
+        /* Section héro — grille + photo + terminal */
         .hero {
             max-width: var(--maxw);
             margin: 0 auto;
@@ -329,7 +342,7 @@ $stack = [
 
         .btn-ghost:hover { background: rgba(52, 184, 138, 0.1); }
 
-        /* ---------- SECTIONS ---------- */
+        /* Sections génériques — stack, devis, contact */
         section {
             max-width: var(--maxw);
             margin: 0 auto;
@@ -345,7 +358,7 @@ $stack = [
             margin: 0 0 20px;
         }
 
-        /* ---------- STACK GRID ---------- */
+        /* Grille des compétences */
         .stack-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -397,7 +410,7 @@ $stack = [
             margin-right: 8px;
         }
 
-        /* ---------- CONTACT ---------- */
+        /* Cartes de contact */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -456,7 +469,7 @@ $stack = [
             word-break: break-word;
         }
 
-        /* ---------- FORMULAIRE DEVIS ---------- */
+        /* Formulaire de devis — style terminal */
         .form {
             background: var(--panel);
             border: 1px solid var(--border);
@@ -667,7 +680,7 @@ $stack = [
             .form-row { grid-template-columns: 1fr; }
         }
 
-        /* ---------- FOOTER ---------- */
+        /* Pied de page */
         .footer {
             display: flex;
             align-items: center;
@@ -678,7 +691,7 @@ $stack = [
             color: var(--muted);
         }
 
-        /* ---------- PHONE CHOICE MODAL ---------- */
+        /* Modale de choix appel / WhatsApp */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -748,7 +761,7 @@ $stack = [
             .modal-actions { flex-direction: column; }
         }
 
-        /* ---------- RESPONSIVE ---------- */
+        /* Adaptations mobiles */
         @media (max-width: 680px) {
             .nav-links { gap: 16px; font-size: 0.85rem; }
             .hero-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -768,7 +781,9 @@ $stack = [
 </head>
 <body>
 
+<!-- Lien d'évitement pour clavier / lecteur d'écran -->
 <a class="skip-link" href="#stack">Aller au contenu</a>
+<!-- Navigation principale sticky -->
 <nav class="nav">
     <div class="nav-inner">
         <a href="#accueil" class="wordmark" style="text-decoration:none">John-Sheer<span class="founder-tag"> SheerTech</span></a>
@@ -780,23 +795,27 @@ $stack = [
     </div>
 </nav>
 
+<!-- Section héro — accueil -->
 <header class="hero" id="accueil">
     <div class="hero-grid">
         <div>
             <p class="eyebrow mono">// portfolio</p>
             <h1 class="hero-title">Code.<br>Réseau.<br>Vidéo protection.</h1>
 
+            <!-- Terminal animé — 3 commandes powershell -->
             <div class="terminal">
                 <div class="terminal-title">C:\Windows\system32\cmd.exe - powershell</div>
                 <div class="terminal-body" id="terminalBody"></div>
             </div>
 
+            <!-- Boutons d'action -->
             <div class="hero-cta">
                 <a href="#stack" class="btn btn-primary">Voir mes compétences</a>
                 <a href="#contact" class="btn btn-ghost">Me contacter</a>
             </div>
         </div>
 
+        <!-- Photo + badge disponibilité -->
         <div class="hero-photo-wrap">
             <div class="photo-frame" role="img" aria-label="Portrait de John-Sheer"></div>
             <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
@@ -804,6 +823,7 @@ $stack = [
     </div>
 </header>
 
+<!-- Section compétences -->
 <section id="stack">
     <h2 class="section-title reveal">Compétences <span class="mono accent">/ ce que je fais</span></h2>
     <div class="stack-grid">
@@ -826,6 +846,7 @@ $stack = [
     </div>
 </section>
 
+<!-- Section formulaire de devis -->
 <section id="devis">
     <h2 class="section-title reveal">Demande de devis <span class="mono accent">/ gratuit</span></h2>
 
@@ -884,6 +905,7 @@ $stack = [
         </form>
 </section>
 
+<!-- Section contact -->
 <section id="contact">
     <h2 class="section-title reveal">Contact <span class="mono accent">/ me joindre</span></h2>
     <div class="contact-grid">
@@ -961,12 +983,13 @@ $stack = [
 </footer>
 
 <script>
+/* Toute l'interactivité en IIFE — pas de globaux */
 (() => {
     'use strict';
 
-    // ── Terminal typing animation ──
+    /* ── Animation de saisie du terminal ── */
     const cmds = [
-        { cmd: 'whoami',            out: 'John-Sheer — développeur full-stack et technicien réseau &amp; vidéosurveillance' },
+        { cmd: 'whoami',            out: 'John-Sheer — développeur full-stack et technicien réseau & vidéosurveillance' },
         { cmd: 'skills --list',     out: 'full-stack · réseau · vidéosurveillance' },
         { cmd: 'compétences',       out: 'React · Vite · JavaScript / TypeScript · PHP · PowerShell · Git · Python · UML · Agilité' },
     ];
@@ -1038,7 +1061,7 @@ $stack = [
         }, 13000);
     }
 
-    // ── Intersection Observer for fade-in reveals ──
+    /* ── Apparition au scroll avec IntersectionObserver ── */
     const els = document.querySelectorAll('.reveal');
     if (els.length && 'IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
@@ -1054,7 +1077,7 @@ $stack = [
         els.forEach((el) => { el.classList.add('visible'); });
     }
 
-    // ── Active nav link highlighting on scroll ──
+    /* ── Surlignage du lien nav actif au scroll ── */
     const navLinks = document.querySelectorAll('.nav-links a');
     const sections = [];
     navLinks.forEach((link) => {
@@ -1078,7 +1101,7 @@ $stack = [
         sections.forEach((s) => { navObserver.observe(s.el); });
     }
 
-    // ── PowerShell prompt for message field ──
+    /* ── Prompt PowerShell dynamique pour le champ message ── */
     const msgField2 = document.getElementById('message');
     const nameField = document.getElementById('name');
     const msgPrompt = document.getElementById('msgPrompt');
@@ -1097,7 +1120,7 @@ $stack = [
         promptCmd.textContent = typed ? ' message' : '';
     };
 
-    // ── Overlay cursor for message field ──
+    /* ── Curseur rouge superposé dans le champ message ── */
     const msgOverlay = document.getElementById('msgOverlay');
 
     const escapeHtml = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -1142,7 +1165,7 @@ $stack = [
         msgRenderOverlay();
     }
 
-    // ── Keyboard sound for all form fields + console ──
+    /* ── Son de clavier Web Audio (oscillateur sine 600 Hz) ── */
     let audioCtx;
     try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
     const resumeAudioCtx = () => {
@@ -1169,6 +1192,7 @@ $stack = [
         osc.stop(now + 0.04);
     };
 
+    /* ── Son clavier dans le formulaire + envoi AJAX ── */
     const devisForm = document.querySelector('#devis form');
     if (devisForm) {
         devisForm.addEventListener('keydown', (e) => {
@@ -1177,7 +1201,7 @@ $stack = [
             }
         });
 
-        // ── AJAX submit to Formspree ──
+        /* Envoi AJAX vers Formspree — pas de rechargement */
         devisForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const btn = devisForm.querySelector('button[type="submit"]');
@@ -1194,7 +1218,7 @@ $stack = [
                             '<div class="emoji">✓</div>' +
                             '<h3>Message envoyé !</h3>' +
                             '<p>Je te réponds sous 24h. À très vite !</p>' +
-                            '<button class="btn btn-primary" id="resetDevis">Soumettre un devis</button>' +
+                            '<button class="btn btn-primary" id="resetDevis">OK</button>' +
                         '</div>';
                     document.getElementById('resetDevis').addEventListener('click', () => {
                         location.reload();
@@ -1212,7 +1236,7 @@ $stack = [
         });
     }
 
-    // ── Custom select ──
+    /* ── Select personnalisé (remplace le <select> natif) ── */
     const trigger = document.getElementById('selectTrigger');
     const menu = document.getElementById('selectMenu');
     const nativeSelect = document.getElementById('service');
@@ -1240,7 +1264,7 @@ $stack = [
         });
     }
 
-    // ── Phone choice modal ──
+    /* ── Modale de choix appel / WhatsApp ── */
     const phoneCards = document.querySelectorAll('.phone-card');
     const modal = document.getElementById('phoneModal');
     const callBtn = document.getElementById('modalCall');
