@@ -161,7 +161,6 @@ $stack = [
             flex-direction: column;
             align-items: center;
             gap: 16px;
-            overflow: visible;
             z-index: 1;
         }
 
@@ -186,7 +185,6 @@ $stack = [
             filter: grayscale(0%) brightness(1) contrast(1);
             transform: scale(1.7);
             z-index: 10;
-            position: relative;
         }
 
         .availability {
@@ -495,7 +493,6 @@ $stack = [
             font-size: 0.88rem;
             caret-color: #e55;
             transition: border-color 0.2s ease;
-            box-sizing: border-box;
         }
 
         .form-control:focus {
@@ -964,46 +961,46 @@ $stack = [
 </footer>
 
 <script>
-(function () {
+(() => {
     'use strict';
 
     // ── Terminal typing animation ──
-    var cmds = [
+    const cmds = [
         { cmd: 'whoami',            out: 'John-Sheer — développeur full-stack et technicien réseau &amp; vidéosurveillance' },
         { cmd: 'skills --list',     out: 'full-stack · réseau · vidéosurveillance' },
         { cmd: 'compétences',       out: 'React · Vite · JavaScript / TypeScript · PHP · PowerShell · Git · Python · UML · Agilité' },
     ];
-    var idx = 0;
-    var termBody = document.getElementById('terminalBody');
-    var terminalEl = document.querySelector('.terminal');
+    let idx = 0;
+    const termBody = document.getElementById('terminalBody');
+    const terminalEl = document.querySelector('.terminal');
 
-    function isConsoleVisible() {
+    const isConsoleVisible = () => {
         if (!terminalEl || document.hidden) return false;
-        var rect = terminalEl.getBoundingClientRect();
+        const rect = terminalEl.getBoundingClientRect();
         return rect.bottom >= 0 && rect.top <= window.innerHeight;
-    }
+    };
 
-    function typeCommand(i) {
-        var entry = cmds[i];
-        var cmdText = entry.cmd;
-        var outText = entry.out;
-        var pos = 0;
-        var typedCmd = '';
-        var typedOut = '';
+    const typeCommand = (i) => {
+        const entry = cmds[i];
+        const cmdText = entry.cmd;
+        const outText = entry.out;
+        let pos = 0;
+        let typedCmd = '';
+        let typedOut = '';
 
-        var p1 = document.createElement('p');
+        const p1 = document.createElement('p');
         p1.innerHTML = '<span class="prompt">PS C:\\Users\\John-Sheer&gt;</span> <span class="cmd"></span>';
-        var p2 = document.createElement('p');
+        const p2 = document.createElement('p');
         p2.className = 'out';
         p2.innerHTML = '<span class="cursor blink">_</span>';
         termBody.innerHTML = '';
         termBody.appendChild(p1);
         termBody.appendChild(p2);
 
-        var cmdSpan = p1.querySelector('.cmd');
-        var outSpan = p2;
+        const cmdSpan = p1.querySelector('.cmd');
+        const outSpan = p2;
 
-        function typeCmd() {
+        const typeCmd = () => {
             if (pos < cmdText.length) {
                 typedCmd += cmdText.charAt(pos);
                 cmdSpan.textContent = typedCmd;
@@ -1014,9 +1011,9 @@ $stack = [
                 pos = 0;
                 setTimeout(typeOut, 200);
             }
-        }
+        };
 
-        function typeOut() {
+        const typeOut = () => {
             if (pos < outText.length) {
                 typedOut += outText.charAt(pos);
                 outSpan.innerHTML = typedOut + '<span class="cursor blink">_</span>';
@@ -1025,15 +1022,15 @@ $stack = [
                 termBody.scrollTop = termBody.scrollHeight;
                 setTimeout(typeOut, 80 + Math.random() * 60);
             }
-        }
+        };
 
         typeCmd();
-    }
+    };
 
     if (termBody) {
         typeCommand(0);
-        var animPaused = false;
-        setInterval(function () {
+        let animPaused = false;
+        setInterval(() => {
             if (!isConsoleVisible()) { animPaused = true; return; }
             if (animPaused) { animPaused = false; typeCommand(idx); return; }
             idx = (idx + 1) % cmds.length;
@@ -1042,70 +1039,72 @@ $stack = [
     }
 
     // ── Intersection Observer for fade-in reveals ──
-    var els = document.querySelectorAll('.reveal');
+    const els = document.querySelectorAll('.reveal');
     if (els.length && 'IntersectionObserver' in window) {
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        els.forEach(function (el) { observer.observe(el); });
+        els.forEach((el) => { observer.observe(el); });
     } else {
-        els.forEach(function (el) { el.classList.add('visible'); });
+        els.forEach((el) => { el.classList.add('visible'); });
     }
 
     // ── Active nav link highlighting on scroll ──
-    var navLinks = document.querySelectorAll('.nav-links a');
-    var sections = [];
-    navLinks.forEach(function (link) {
-        var href = link.getAttribute('href');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = [];
+    navLinks.forEach((link) => {
+        const href = link.getAttribute('href');
         if (href && href.charAt(0) === '#') {
-            var section = document.getElementById(href.slice(1));
-            if (section) sections.push({ el: section, link: link });
+            const section = document.getElementById(href.slice(1));
+            if (section) sections.push({ el: section, link });
         }
     });
     if (sections.length && 'IntersectionObserver' in window) {
-        var navObserver = new IntersectionObserver(function () {
-            var current = '';
-            sections.forEach(function (s) {
-                var rect = s.el.getBoundingClientRect();
+        const navObserver = new IntersectionObserver(() => {
+            let current = '';
+            sections.forEach((s) => {
+                const rect = s.el.getBoundingClientRect();
                 if (rect.top <= 150) current = s.el.id;
             });
-            navLinks.forEach(function (l) { l.style.color = ''; });
-            var active = document.querySelector('.nav-links a[href="#' + current + '"]');
+            navLinks.forEach((l) => { l.style.color = ''; });
+            const active = document.querySelector(`.nav-links a[href="#${current}"]`);
             if (active) active.style.color = 'var(--emerald)';
         }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
-        sections.forEach(function (s) { navObserver.observe(s.el); });
+        sections.forEach((s) => { navObserver.observe(s.el); });
     }
 
     // ── PowerShell prompt for message field ──
-    var msgField2 = document.getElementById('message');
-    var nameField = document.getElementById('name');
-    var msgPrompt = document.getElementById('msgPrompt');
-    var promptLabel = document.querySelector('.prompt-label');
-    var promptCmd = document.querySelector('.prompt-cmd');
+    const msgField2 = document.getElementById('message');
+    const nameField = document.getElementById('name');
+    const msgPrompt = document.getElementById('msgPrompt');
+    const promptLabel = document.querySelector('.prompt-label');
+    const promptCmd = document.querySelector('.prompt-cmd');
 
-    function autoResize(el) {
+    const autoResize = (el) => {
         el.style.height = 'auto';
         el.style.height = el.scrollHeight + 'px';
-    }
+    };
 
-    function updateMsgPrompt() {
-        var name = nameField ? nameField.value.trim().replace(/\s+/g, '_') || 'votreNom' : 'votreNom';
-        var typed = msgField2 ? msgField2.value : '';
-        promptLabel.textContent = 'PS C:\\John-Sheer\\Devis\\' + name + '> ';
+    const updateMsgPrompt = () => {
+        const name = nameField ? nameField.value.trim().replace(/\s+/g, '_') || 'votreNom' : 'votreNom';
+        const typed = msgField2 ? msgField2.value : '';
+        promptLabel.textContent = `PS C:\\John-Sheer\\Devis\\${name}> `;
         promptCmd.textContent = typed ? ' message' : '';
-    }
+    };
 
     // ── Overlay cursor for message field ──
-    var msgOverlay = document.getElementById('msgOverlay');
+    const msgOverlay = document.getElementById('msgOverlay');
 
-    function msgRenderOverlay() {
-        var val = msgField2.value;
-        var html;
+    const escapeHtml = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const msgRenderOverlay = () => {
+        const val = msgField2.value;
+        let html;
         if (!val && document.activeElement !== msgField2) {
             html = '<span style="color:rgba(255,255,255,0.15)">Décris ton projet...</span>';
         } else {
@@ -1115,84 +1114,80 @@ $stack = [
             }
         }
         msgOverlay.innerHTML = html;
-    }
-
-    function escapeHtml(s) {
-        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
+    };
 
     if (msgField2 && msgOverlay) {
         autoResize(msgField2);
-        msgField2.addEventListener('focus', function () {
+        msgField2.addEventListener('focus', () => {
             updateMsgPrompt();
             msgPrompt.classList.add('visible');
             msgRenderOverlay();
             autoResize(msgField2);
         });
-        msgField2.addEventListener('blur', function () {
+        msgField2.addEventListener('blur', () => {
             msgRenderOverlay();
             if (!msgField2.value.trim()) {
                 msgPrompt.classList.remove('visible');
             }
             autoResize(msgField2);
         });
-        msgField2.addEventListener('input', function () {
+        msgField2.addEventListener('input', () => {
             msgRenderOverlay();
             updateMsgPrompt();
             autoResize(msgField2);
         });
-        nameField.addEventListener('input', function () {
+        nameField.addEventListener('input', () => {
             if (msgPrompt.classList.contains('visible')) updateMsgPrompt();
         });
         msgRenderOverlay();
     }
 
     // ── Keyboard sound for all form fields + console ──
-    var audioCtx;
+    let audioCtx;
     try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-    function resumeAudioCtx() {
+    const resumeAudioCtx = () => {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }
+    };
     document.addEventListener('click', resumeAudioCtx);
     document.addEventListener('pointermove', resumeAudioCtx, { once: true });
     document.addEventListener('touchstart', resumeAudioCtx, { once: true });
 
-    function playKeySound() {
+    const playKeySound = () => {
         if (!audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.frequency.value = 600;
         osc.type = 'sine';
-        var now = audioCtx.currentTime;
+        const now = audioCtx.currentTime;
         gain.gain.setValueAtTime(0, now);
         gain.gain.linearRampToValueAtTime(0.05, now + 0.005);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
         osc.start(now);
         osc.stop(now + 0.04);
-    }
+    };
 
-    var devisForm = document.querySelector('#devis form');
+    const devisForm = document.querySelector('#devis form');
     if (devisForm) {
-        devisForm.addEventListener('keydown', function (e) {
+        devisForm.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
                 playKeySound();
             }
         });
 
         // ── AJAX submit to Formspree ──
-        devisForm.addEventListener('submit', function (e) {
+        devisForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            var btn = devisForm.querySelector('button[type="submit"]');
+            const btn = devisForm.querySelector('button[type="submit"]');
             btn.textContent = 'Envoi en cours…';
             btn.disabled = true;
             fetch(devisForm.action, {
                 method: 'POST',
                 body: new FormData(devisForm),
                 headers: { 'Accept': 'application/json' }
-            }).then(function (r) { return r.json(); }).then(function (data) {
+            }).then((r) => r.json()).then((data) => {
                 if (data.ok) {
                     devisForm.innerHTML =
                         '<div class="form-success">' +
@@ -1201,7 +1196,7 @@ $stack = [
                             '<p>Je te réponds sous 24h. À très vite !</p>' +
                             '<button class="btn btn-primary" id="resetDevis">Soumettre un devis</button>' +
                         '</div>';
-                    document.getElementById('resetDevis').addEventListener('click', function () {
+                    document.getElementById('resetDevis').addEventListener('click', () => {
                         location.reload();
                     });
                 } else {
@@ -1209,7 +1204,7 @@ $stack = [
                     btn.disabled = false;
                     alert("Erreur : " + (data.error || "Réessaie plus tard."));
                 }
-            }).catch(function () {
+            }).catch(() => {
                 btn.textContent = 'Réessaie';
                 btn.disabled = false;
                 alert("Erreur réseau. Réessaie.");
@@ -1218,109 +1213,109 @@ $stack = [
     }
 
     // ── Custom select ──
-    var trigger = document.getElementById('selectTrigger');
-    var menu = document.getElementById('selectMenu');
-    var nativeSelect = document.getElementById('service');
+    const trigger = document.getElementById('selectTrigger');
+    const menu = document.getElementById('selectMenu');
+    const nativeSelect = document.getElementById('service');
     if (trigger && menu && nativeSelect) {
-        trigger.addEventListener('click', function (e) {
+        trigger.addEventListener('click', (e) => {
             e.stopPropagation();
             menu.classList.toggle('open');
         });
-        menu.querySelectorAll('li').forEach(function (li) {
-            li.addEventListener('click', function () {
-                var val = li.getAttribute('data-value');
-                var text = li.textContent;
+        menu.querySelectorAll('li').forEach((li) => {
+            li.addEventListener('click', () => {
+                const val = li.getAttribute('data-value');
+                const text = li.textContent;
                 nativeSelect.value = val;
                 trigger.textContent = text;
-                menu.querySelectorAll('li').forEach(function (l) { l.classList.remove('selected'); });
+                menu.querySelectorAll('li').forEach((l) => { l.classList.remove('selected'); });
                 li.classList.add('selected');
                 menu.classList.remove('open');
             });
         });
-        document.addEventListener('click', function () {
+        document.addEventListener('click', () => {
             menu.classList.remove('open');
         });
-        menu.addEventListener('click', function (e) {
+        menu.addEventListener('click', (e) => {
             e.stopPropagation();
         });
     }
 
     // ── Phone choice modal ──
-    var phoneCards = document.querySelectorAll('.phone-card');
-    var modal = document.getElementById('phoneModal');
-    var callBtn = document.getElementById('modalCall');
-    var waBtn = document.getElementById('modalWhatsApp');
-    var closeBtn = document.getElementById('modalClose');
+    const phoneCards = document.querySelectorAll('.phone-card');
+    const modal = document.getElementById('phoneModal');
+    const callBtn = document.getElementById('modalCall');
+    const waBtn = document.getElementById('modalWhatsApp');
+    const closeBtn = document.getElementById('modalClose');
 
-    phoneCards.forEach(function (card) {
-        card.addEventListener('click', function () {
+    phoneCards.forEach((card) => {
+        card.addEventListener('click', () => {
             callBtn.href = 'tel:' + card.getAttribute('data-tel');
             waBtn.href = 'https://wa.me/' + card.getAttribute('data-wa');
             modal.classList.add('active');
         });
     });
 
-    function closeModal() { modal.classList.remove('active'); }
+    const closeModal = () => { modal.classList.remove('active'); };
     closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function (e) {
+    modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
 
     /* Hit map : scale uniquement sur pixels non transparents */
-    (function () {
-        var frame = document.querySelector('.photo-frame');
+    (() => {
+        const frame = document.querySelector('.photo-frame');
         if (!frame) return;
-        var img = new Image();
+        const img = new Image();
         img.crossOrigin = 'anonymous';
         img.src = 'John.png?' + Date.now();
-        var hitmap = [];
-        var iw, ih, scaleFactor;
+        const hitmap = [];
+        let iw, ih, scaleFactor;
 
-        img.onload = function () {
+        img.onload = () => {
             iw = img.naturalWidth;
             ih = img.naturalHeight;
-            var c = document.createElement('canvas');
-            var ctx = c.getContext('2d');
+            const c = document.createElement('canvas');
+            const ctx = c.getContext('2d');
             c.width = iw;
             c.height = ih;
             ctx.drawImage(img, 0, 0);
-            var data = ctx.getImageData(0, 0, iw, ih).data;
-            var step = 4;
-            for (var y = 0; y < ih; y += step) {
+            const data = ctx.getImageData(0, 0, iw, ih).data;
+            const step = 4;
+            for (let y = 0; y < ih; y += step) {
                 hitmap[y] = [];
-                for (var x = 0; x < iw; x += step) {
-                    var alpha = data[(y * iw + x) * 4 + 3];
+                for (let x = 0; x < iw; x += step) {
+                    const alpha = data[(y * iw + x) * 4 + 3];
                     hitmap[y][x] = alpha > 30;
                 }
             }
             scaleFactor = step;
         };
 
-        frame.addEventListener('mousemove', function (e) {
+        frame.addEventListener('mousemove', (e) => {
             if (!hitmap.length) return;
-            var rect = frame.getBoundingClientRect();
-            var ew = rect.width, eh = rect.height;
-            var s = Math.min(ew / iw, eh / ih);
-            var rw = iw * s, rh = ih * s;
-            var ox = (ew - rw) / 2, oy = (eh - rh) / 2;
-            var mx = e.clientX - rect.left - ox;
-            var my = e.clientY - rect.top - oy;
+            const rect = frame.getBoundingClientRect();
+            const ew = rect.width, eh = rect.height;
+            const s = Math.min(ew / iw, eh / ih);
+            const rw = iw * s, rh = ih * s;
+            const ox = (ew - rw) / 2, oy = (eh - rh) / 2;
+            const mx = e.clientX - rect.left - ox;
+            const my = e.clientY - rect.top - oy;
             if (mx < 0 || my < 0 || mx >= rw || my >= rh) {
                 frame.classList.remove('hover-active');
                 return;
             }
-            var px = Math.floor((mx / rw) * iw);
-            var py = Math.floor((my / rh) * ih);
-            var sy = Math.floor(py / scaleFactor) * scaleFactor;
-            var sx = Math.floor(px / scaleFactor) * scaleFactor;
-            var hit = hitmap[sy] && hitmap[sy][sx];
+            const px = Math.floor((mx / rw) * iw);
+            const py = Math.floor((my / rh) * ih);
+            const sy = Math.floor(py / scaleFactor) * scaleFactor;
+            const sx = Math.floor(px / scaleFactor) * scaleFactor;
+            const hit = hitmap[sy] && hitmap[sy][sx];
             frame.classList.toggle('hover-active', !!hit);
         });
 
-        frame.addEventListener('mouseleave', function () {
+        frame.addEventListener('mouseleave', () => {
             frame.classList.remove('hover-active');
         });
     })();
