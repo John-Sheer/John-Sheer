@@ -152,12 +152,9 @@ $stack = [
         .hero-grid {
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
-            grid-template-rows: auto auto;
-            gap: 48px 48px;
+            gap: 48px;
             align-items: start;
         }
-        .hero-cta { grid-column: 1; grid-row: 2; }
-        .hero-grid > a.availability { grid-column: 2; grid-row: 2; margin-top: 0; }
 
         .hero-photo-wrap {
             display: flex;
@@ -761,8 +758,6 @@ $stack = [
             .photo-frame { max-width: 260px; }
             .stack-grid { grid-template-columns: 1fr; }
             .contact-grid { grid-template-columns: 1fr; }
-            .hero-grid > .hero-cta,
-            .hero-grid > a.availability { grid-column: auto; grid-row: auto; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -797,18 +792,17 @@ $stack = [
                 <div class="terminal-title">C:\Windows\system32\cmd.exe - powershell</div>
                 <div class="terminal-body" id="terminalBody"></div>
             </div>
+
+            <div class="hero-cta">
+                <a href="#stack" class="btn btn-primary">Voir mes compétences</a>
+                <a href="#contact" class="btn btn-ghost">Me contacter</a>
+            </div>
         </div>
 
         <div class="hero-photo-wrap">
             <div class="photo-frame" role="img" aria-label="Portrait de John-Sheer"></div>
+            <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
         </div>
-
-        <div class="hero-cta">
-            <a href="#stack" class="btn btn-primary">Voir mes compétences</a>
-            <a href="#contact" class="btn btn-ghost">Me contacter</a>
-        </div>
-
-        <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
     </div>
 </header>
 
