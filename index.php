@@ -1343,17 +1343,17 @@ $stack = [
 
     /* ── Menu burger ── */
     const burger = document.getElementById('burgerBtn');
-    const navLinks = document.getElementById('navLinks');
-    if (burger && navLinks) {
+    const burgerMenu = document.getElementById('navLinks');
+    if (burger && burgerMenu) {
         burger.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
+            burgerMenu.classList.toggle('open');
         });
-        navLinks.querySelectorAll('a').forEach((a) => {
-            a.addEventListener('click', () => { navLinks.classList.remove('open'); });
+        burgerMenu.querySelectorAll('a').forEach((a) => {
+            a.addEventListener('click', () => { burgerMenu.classList.remove('open'); });
         });
         document.addEventListener('click', (e) => {
-            if (!burger.contains(e.target) && !navLinks.contains(e.target)) {
-                navLinks.classList.remove('open');
+            if (!burger.contains(e.target) && !burgerMenu.contains(e.target)) {
+                burgerMenu.classList.remove('open');
             }
         });
     }
