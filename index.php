@@ -206,7 +206,7 @@ $stack = [
             cursor: pointer;
             text-decoration: none;
             transition: background 0.2s ease, box-shadow 0.2s ease;
-            margin-top: -10px;
+            margin-top: -20px;
         }
         .availability:hover {
             background: rgba(52, 184, 138, 0.2);
