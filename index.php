@@ -250,6 +250,8 @@ $stack = [
             padding: 14px 16px 16px;
             font-size: 0.88rem;
             min-height: 150px;
+            max-height: 350px;
+            overflow-y: auto;
         }
 
         .terminal-body p {
@@ -986,12 +988,17 @@ $stack = [
         var typedCmd = '';
         var typedOut = '';
 
-        termBody.innerHTML =
-            '<p><span class="prompt">PS C:\\Users\\John-Sheer&gt;</span> <span class="cmd" id="typingCmd"></span></p>' +
-            '<p class="out" id="typingOut"><span class="cursor blink">_</span></p>';
+        var p1 = document.createElement('p');
+        p1.innerHTML = '<span class="prompt">PS C:\\Users\\John-Sheer&gt;</span> <span class="cmd"></span>';
+        var p2 = document.createElement('p');
+        p2.className = 'out';
+        p2.innerHTML = '<span class="cursor blink">_</span>';
+        termBody.appendChild(p1);
+        termBody.appendChild(p2);
+        termBody.scrollTop = termBody.scrollHeight;
 
-        var cmdSpan = document.getElementById('typingCmd');
-        var outSpan = document.getElementById('typingOut');
+        var cmdSpan = p1.querySelector('.cmd');
+        var outSpan = p2;
 
         function typeCmd() {
             if (pos < cmdText.length) {
@@ -1012,6 +1019,7 @@ $stack = [
                 outSpan.innerHTML = typedOut + '<span class="cursor blink">_</span>';
                 if (isConsoleVisible()) playKeySound();
                 pos++;
+                termBody.scrollTop = termBody.scrollHeight;
                 setTimeout(typeOut, 80 + Math.random() * 60);
             }
         }
