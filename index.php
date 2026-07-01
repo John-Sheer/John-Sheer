@@ -173,11 +173,12 @@ $stack = [
             margin: 0 auto;
             padding: 30px 24px 24px;
             scroll-margin-top: 80px;
+            margin-bottom: 40px;
         }
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-columns: 1fr 1fr;
             gap: 48px;
             align-items: start;
         }
@@ -186,8 +187,10 @@ $stack = [
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 0;
             z-index: 1;
+            grid-row: 1 / 3;
+            align-self: center;
         }
 
         .photo-frame {
@@ -205,12 +208,20 @@ $stack = [
             filter: grayscale(100%) brightness(1.05) contrast(1.05);
             transition: filter 0.4s ease, transform 0.4s ease;
             transform-origin: top center;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .photo-frame.hover-active {
             filter: grayscale(0%) brightness(1) contrast(1);
             transform: scale(1.7);
             z-index: 10;
+        }
+        .photo-frame.hover-active + .availability {
+            color: var(--emerald);
+            background: rgba(52, 184, 138, 0.25);
+            box-shadow: 0 0 16px rgba(52, 184, 138, 0.5), 0 0 40px rgba(52, 184, 138, 0.2);
+            border-color: rgba(52, 184, 138, 0.6);
         }
 
         .availability {
@@ -230,7 +241,9 @@ $stack = [
             cursor: pointer;
             text-decoration: none;
             transition: background 0.2s ease, box-shadow 0.2s ease;
-            margin-top: -15px;
+            transform: translateY(-70px);
+            white-space: nowrap;
+            margin-top: 0;
         }
         .availability:hover {
             background: rgba(52, 184, 138, 0.2);
@@ -258,12 +271,15 @@ $stack = [
             border: 1px solid rgba(52, 184, 138, 0.35);
             border-radius: 0;
             background: #000;
-            margin-bottom: 40px;
+            margin-bottom: 38px;
+            margin-top: -38px;
             font-family: 'Consolas', monospace;
             height: 150px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            grid-column: 1;
+            grid-row: 2;
         }
         .terminal-title {
             flex: 0 0 auto;
@@ -334,6 +350,7 @@ $stack = [
             padding: 7px 14px;
             border-radius: 8px;
             text-decoration: none;
+            white-space: nowrap;
             transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
         }
 
@@ -776,15 +793,29 @@ $stack = [
 
         /* Adaptations mobiles */
         @media (max-width: 680px) {
-            .wordmark { font-size: 1.4rem; }
+            .wordmark { font-size: 2.6rem; }
             .founder-tag { font-size: 0.7rem; padding: 2px 6px; margin-left: 6px; }
             .nav-inner { padding: 6px 16px; }
             .nav-links { gap: 14px; font-size: 0.85rem; }
-            .hero-grid { grid-template-columns: 1fr; gap: 32px; }
-            .hero-photo-wrap { order: -1; }
-            .photo-frame { max-width: 260px; }
+            .eyebrow { white-space: nowrap; font-size: 1.2rem; }
+            .hero-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .hero-grid > :first-child { padding-right: 0; overflow: visible; }
+            .hero-photo-wrap { order: initial; grid-row: auto; }
+            .terminal { grid-column: 1 / -1; max-width: 100%; margin-top: 14px; margin-bottom: 10px; }
+            .hero-cta { gap: 16px; flex-wrap: nowrap; overflow: visible; }
+            .hero-cta .btn { padding: 8px 10px; font-size: 0.75rem; }
+            .hero-grid > .availability { grid-column: 1 / -1; justify-self: center; margin: 80px 0 0; padding: 8px 16px 4px; font-size: 0.85rem; }
+            .hero { margin-bottom: 10px; padding-bottom: 8px; }
+            section { padding-top: 20px; }
+            .photo-frame { max-width: none; width: 200%; transform: translateX(-40px) translateY(-20px); z-index: 0; padding-right: 0; margin-right: 0; }
+            .photo-frame.hover-active { transform: translateX(-40px) translateY(-20px) scale(1.7); }
+            .availability { display: none; }
             .stack-grid { grid-template-columns: 1fr; }
             .contact-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 400px) {
+            .photo-frame { max-width: 280px; transform: translateX(-20px) translateY(-15px); }
+            .terminal { height: 120px; }
         }
         @media (max-width: 480px) {
             .burger { display: inline-flex; align-items: center; justify-content: center; }
@@ -792,12 +823,14 @@ $stack = [
                 display: none;
                 position: absolute;
                 top: 100%;
-                left: 0; right: 0;
+                right: 0; left: auto;
                 flex-direction: column;
                 gap: 0;
                 background: rgba(8, 8, 11, 0.95);
-                border-bottom: 1px solid var(--border);
+                border: 1px solid var(--border);
+                border-top: none;
                 padding: 8px 0;
+                min-width: 160px;
                 z-index: 20;
             }
             .nav-links.open { display: flex; }
@@ -841,12 +874,6 @@ $stack = [
             <p class="eyebrow mono">// John-Sheer MENSAH</p>
             <h1 class="hero-title">Code.<br>Réseau.<br>Vidéo protection.</h1>
 
-            <!-- Terminal animé — 3 commandes powershell -->
-            <div class="terminal">
-                <div class="terminal-title">C:\Windows\system32\cmd.exe - powershell</div>
-                <div class="terminal-body" id="terminalBody"></div>
-            </div>
-
             <!-- Boutons d'action -->
             <div class="hero-cta">
                 <a href="#stack" class="btn btn-primary">Voir mes compétences</a>
@@ -858,6 +885,12 @@ $stack = [
         <div class="hero-photo-wrap">
             <div class="photo-frame" role="img" aria-label="Portrait de John-Sheer"></div>
             <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
+        </div>
+
+        <!-- Terminal animé — 3 commandes powershell -->
+        <div class="terminal">
+            <div class="terminal-title">C:\Windows\system32\cmd.exe - powershell</div>
+            <div class="terminal-body" id="terminalBody"></div>
         </div>
     </div>
 </header>
@@ -1357,6 +1390,29 @@ $stack = [
             }
         });
     }
+
+    /* ── Déplace "disponible" après la console sur mobile ── */
+    const availMobile = document.querySelector('.availability');
+    const heroGrid = document.querySelector('.hero-grid');
+    const termEl = document.querySelector('.terminal');
+    let availMoved = false;
+    const origParent = availMobile ? availMobile.parentNode : null;
+    const moveAvailMobile = () => {
+        if (!availMobile || !heroGrid || !termEl) return;
+        if (window.innerWidth <= 680 && !availMoved) {
+            termEl.after(availMobile);
+            availMobile.style.display = 'inline-flex';
+            availMobile.style.justifyContent = 'center';
+            availMoved = true;
+        } else if (window.innerWidth > 680 && availMoved && origParent) {
+            origParent.appendChild(availMobile);
+            availMobile.style.display = '';
+            availMobile.style.justifyContent = '';
+            availMoved = false;
+        }
+    };
+    moveAvailMobile();
+    window.addEventListener('resize', moveAvailMobile);
 
     /* Hit map : scale uniquement sur pixels non transparents */
     (() => {
