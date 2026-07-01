@@ -997,6 +997,33 @@ $stack = [
     const termBody = document.getElementById('terminalBody');
     const terminalEl = document.querySelector('.terminal');
 
+    /* ── Son de clavier Web Audio (oscillateur sine 600 Hz) ── */
+    let audioCtx;
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+    const resumeAudioCtx = () => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    };
+    document.addEventListener('click', resumeAudioCtx);
+    document.addEventListener('pointermove', resumeAudioCtx, { once: true });
+    document.addEventListener('touchstart', resumeAudioCtx, { once: true });
+
+    const playKeySound = () => {
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = 600;
+        osc.type = 'sine';
+        const now = audioCtx.currentTime;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.05, now + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
+    };
+
     const isConsoleVisible = () => {
         if (!terminalEl || document.hidden) return false;
         const rect = terminalEl.getBoundingClientRect();
@@ -1164,33 +1191,6 @@ $stack = [
         });
         msgRenderOverlay();
     }
-
-    /* ── Son de clavier Web Audio (oscillateur sine 600 Hz) ── */
-    let audioCtx;
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-    const resumeAudioCtx = () => {
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    };
-    document.addEventListener('click', resumeAudioCtx);
-    document.addEventListener('pointermove', resumeAudioCtx, { once: true });
-    document.addEventListener('touchstart', resumeAudioCtx, { once: true });
-
-    const playKeySound = () => {
-        if (!audioCtx) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.value = 600;
-        osc.type = 'sine';
-        const now = audioCtx.currentTime;
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.05, now + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        osc.start(now);
-        osc.stop(now + 0.04);
-    };
 
     /* ── Son clavier dans le formulaire + envoi AJAX ── */
     const devisForm = document.querySelector('#devis form');
