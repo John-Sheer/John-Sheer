@@ -799,7 +799,7 @@ $stack = [
             .nav-links { gap: 14px; font-size: 0.85rem; }
             .eyebrow { white-space: nowrap; font-size: 1.2rem; }
             .hero-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-            .hero-grid > :first-child { padding-right: 0; overflow: visible; }
+            .hero-grid > :first-child { padding-right: 0; overflow: visible; position: relative; z-index: 15; }
             .hero-photo-wrap { order: initial; grid-row: auto; }
             .terminal { grid-column: 1 / -1; max-width: 100%; margin-top: 14px; margin-bottom: 10px; }
             .hero-cta { gap: 16px; flex-wrap: nowrap; overflow: visible; }
