@@ -182,7 +182,7 @@ $stack = [
             transform-origin: top center;
         }
 
-        .photo-frame:hover {
+        .photo-frame.hover-active {
             filter: grayscale(0%) brightness(1) contrast(1);
             transform: scale(1.7);
             z-index: 10;
@@ -1255,7 +1255,61 @@ $stack = [
         if (e.key === 'Escape') closeModal();
     });
 
+    /* Hit map : scale uniquement sur pixels non transparents */
+    (function () {
+        var frame = document.querySelector('.photo-frame');
+        if (!frame) return;
+        var img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = 'John.png?' + Date.now();
+        var hitmap = [];
+        var iw, ih, scaleFactor;
 
+        img.onload = function () {
+            iw = img.naturalWidth;
+            ih = img.naturalHeight;
+            var c = document.createElement('canvas');
+            var ctx = c.getContext('2d');
+            c.width = iw;
+            c.height = ih;
+            ctx.drawImage(img, 0, 0);
+            var data = ctx.getImageData(0, 0, iw, ih).data;
+            var step = 4;
+            for (var y = 0; y < ih; y += step) {
+                hitmap[y] = [];
+                for (var x = 0; x < iw; x += step) {
+                    var alpha = data[(y * iw + x) * 4 + 3];
+                    hitmap[y][x] = alpha > 30;
+                }
+            }
+            scaleFactor = step;
+        };
+
+        frame.addEventListener('mousemove', function (e) {
+            if (!hitmap.length) return;
+            var rect = frame.getBoundingClientRect();
+            var ew = rect.width, eh = rect.height;
+            var s = Math.min(ew / iw, eh / ih);
+            var rw = iw * s, rh = ih * s;
+            var ox = (ew - rw) / 2, oy = (eh - rh) / 2;
+            var mx = e.clientX - rect.left - ox;
+            var my = e.clientY - rect.top - oy;
+            if (mx < 0 || my < 0 || mx >= rw || my >= rh) {
+                frame.classList.remove('hover-active');
+                return;
+            }
+            var px = Math.floor((mx / rw) * iw);
+            var py = Math.floor((my / rh) * ih);
+            var sy = Math.floor(py / scaleFactor) * scaleFactor;
+            var sx = Math.floor(px / scaleFactor) * scaleFactor;
+            var hit = hitmap[sy] && hitmap[sy][sx];
+            frame.classList.toggle('hover-active', !!hit);
+        });
+
+        frame.addEventListener('mouseleave', function () {
+            frame.classList.remove('hover-active');
+        });
+    })();
 
 })();
 </script>
