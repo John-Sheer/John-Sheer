@@ -1007,21 +1007,27 @@ $stack = [
     document.addEventListener('pointermove', resumeAudioCtx, { once: true });
     document.addEventListener('touchstart', resumeAudioCtx, { once: true });
 
+    let clickBuf = null;
+    const mkClickBuf = () => {
+        const sr = audioCtx.sampleRate;
+        const len = Math.floor(sr * 0.025);
+        const buf = audioCtx.createBuffer(1, len, sr);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.12));
+        return buf;
+    };
     const playKeySound = () => {
         if (!audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.value = 600;
-        osc.type = 'sine';
-        const now = audioCtx.currentTime;
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.05, now + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        osc.start(now);
-        osc.stop(now + 0.04);
+        if (!clickBuf) clickBuf = mkClickBuf();
+        const src = audioCtx.createBufferSource();
+        src.buffer = clickBuf;
+        const g = audioCtx.createGain();
+        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.025);
+        src.connect(g);
+        g.connect(audioCtx.destination);
+        src.start();
     };
 
     const isConsoleVisible = () => {
