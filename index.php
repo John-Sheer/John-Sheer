@@ -975,7 +975,7 @@ $stack = [
     function isConsoleVisible() {
         if (!terminalEl) return false;
         var rect = terminalEl.getBoundingClientRect();
-        return rect.bottom > -100 && rect.top < window.innerHeight + 100;
+        return rect.bottom >= 0 && rect.top <= window.innerHeight;
     }
 
     function typeCommand(i) {
