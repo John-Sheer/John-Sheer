@@ -1023,8 +1023,8 @@ $stack = [
         const src = audioCtx.createBufferSource();
         src.buffer = clickBuf;
         const g = audioCtx.createGain();
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.025);
+        g.gain.setValueAtTime(0.055, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
         src.connect(g);
         g.connect(audioCtx.destination);
         src.start();
