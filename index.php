@@ -966,10 +966,17 @@ $stack = [
     var cmds = [
         { cmd: 'whoami',            out: 'John-Sheer — développeur full-stack et technicien réseau &amp; vidéosurveillance' },
         { cmd: 'skills --list',     out: 'full-stack · réseau · vidéosurveillance · vibecoding' },
-        { cmd: 'compétences',       out: 'React · Vite · PHP · Firebase · Git · Python · UML · Agilité' },
+        { cmd: 'compétences',       out: 'React · Vite · JavaScript / TypeScript · PHP · PowerShell · Git · Python · UML · Agilité' },
     ];
     var idx = 0;
     var termBody = document.getElementById('terminalBody');
+    var terminalEl = document.querySelector('.terminal');
+
+    function isConsoleVisible() {
+        if (!terminalEl) return false;
+        var rect = terminalEl.getBoundingClientRect();
+        return rect.bottom > -100 && rect.top < window.innerHeight + 100;
+    }
 
     function typeCommand(i) {
         var entry = cmds[i];
@@ -990,6 +997,7 @@ $stack = [
             if (pos < cmdText.length) {
                 typedCmd += cmdText.charAt(pos);
                 cmdSpan.textContent = typedCmd;
+                if (isConsoleVisible()) playKeySound();
                 pos++;
                 setTimeout(typeCmd, 80 + Math.random() * 60);
             } else {
@@ -1002,6 +1010,7 @@ $stack = [
             if (pos < outText.length) {
                 typedOut += outText.charAt(pos);
                 outSpan.innerHTML = typedOut + '<span class="cursor blink">_</span>';
+                if (isConsoleVisible()) playKeySound();
                 pos++;
                 setTimeout(typeOut, 40 + Math.random() * 40);
             }
@@ -1124,16 +1133,15 @@ $stack = [
         msgRenderOverlay();
     }
 
-    // ── Keyboard sound for all form fields ──
+    // ── Keyboard sound for all form fields + console ──
     var audioCtx;
-    document.addEventListener('click', function init() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        document.removeEventListener('click', init);
-    }, { once: true });
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+    document.addEventListener('click', function () {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    });
 
     function playKeySound() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (!audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
         var osc = audioCtx.createOscillator();
         var gain = audioCtx.createGain();
