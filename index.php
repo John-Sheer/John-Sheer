@@ -235,16 +235,13 @@ $stack = [
             background: #000;
             margin-bottom: 40px;
             font-family: 'Consolas', monospace;
-            max-height: 420px;
+            height: 420px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
-        .terminal-body {
-            flex: 1 1 auto;
-            min-height: 0;
-        }
-
         .terminal-title {
+            flex: 0 0 auto;
             background: #1a1a1a;
             padding: 5px 14px;
             font-size: 0.75rem;
@@ -252,11 +249,11 @@ $stack = [
             border-bottom: 1px solid rgba(52, 184, 138, 0.35);
             user-select: none;
         }
-
         .terminal-body {
+            flex: 1;
+            min-height: 0;
             padding: 14px 16px 16px;
             font-size: 0.88rem;
-            min-height: 150px;
             overflow-y: auto;
         }
 
