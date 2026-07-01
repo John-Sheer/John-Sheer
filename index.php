@@ -250,6 +250,8 @@ $stack = [
             padding: 14px 16px 16px;
             font-size: 0.88rem;
             min-height: 150px;
+            max-height: 350px;
+            overflow-y: auto;
         }
 
         .terminal-body p {
