@@ -1147,12 +1147,14 @@ $stack = [
         var gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        osc.frequency.value = 800;
-        osc.type = 'square';
-        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.06);
+        osc.frequency.value = 600;
+        osc.type = 'sine';
+        var now = audioCtx.currentTime;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.05, now + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
     }
 
     var devisForm = document.querySelector('#devis form');
