@@ -973,7 +973,7 @@ $stack = [
     var terminalEl = document.querySelector('.terminal');
 
     function isConsoleVisible() {
-        if (!terminalEl) return false;
+        if (!terminalEl || document.hidden) return false;
         var rect = terminalEl.getBoundingClientRect();
         return rect.bottom >= 0 && rect.top <= window.innerHeight;
     }
@@ -1310,6 +1310,13 @@ $stack = [
             frame.classList.remove('hover-active');
         });
     })();
+
+    // Resume AudioContext when tab becomes visible again
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden && window.audioCtx && window.audioCtx.state === 'suspended') {
+            window.audioCtx.resume();
+        }
+    });
 
 })();
 </script>
