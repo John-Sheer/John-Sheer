@@ -1139,9 +1139,12 @@ $stack = [
     // ── Keyboard sound for all form fields + console ──
     var audioCtx;
     try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-    document.addEventListener('click', function () {
+    function resumeAudioCtx() {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    });
+    }
+    document.addEventListener('click', resumeAudioCtx);
+    document.addEventListener('pointermove', resumeAudioCtx, { once: true });
+    document.addEventListener('touchstart', resumeAudioCtx, { once: true });
 
     function playKeySound() {
         if (!audioCtx) return;
