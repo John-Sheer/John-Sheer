@@ -797,12 +797,12 @@ $stack = [
             <div class="hero-cta">
                 <a href="#stack" class="btn btn-primary">Voir mes compétences</a>
                 <a href="#contact" class="btn btn-ghost">Me contacter</a>
+                <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
             </div>
         </div>
 
         <div class="hero-photo-wrap">
             <div class="photo-frame" role="img" aria-label="Portrait de John-Sheer"></div>
-            <a href="#contact" class="availability"><span class="dot"></span>disponible pour projets</a>
         </div>
     </div>
 </header>
