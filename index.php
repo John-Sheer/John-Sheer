@@ -451,6 +451,63 @@ $stack_wide = [
             margin-right: 8px;
         }
 
+        /* ---------- PROJETS ---------- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .project-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            text-decoration: none;
+            color: var(--text);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .project-card:hover {
+            border-color: rgba(52, 184, 138, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .project-icon {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .project-name {
+            display: block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .project-desc {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 680px) {
+            .project-grid { grid-template-columns: 1fr; }
+        }
+
         /* ---------- CONTACT ---------- */
         .contact-grid {
             display: grid;
@@ -716,6 +773,7 @@ $stack_wide = [
         <span class="wordmark">John-Sheer<span class="founder-tag"> SheerTech</span></span>
         <div class="nav-links">
             <a href="#stack">Stack</a>
+            <a href="#projets">Projets</a>
             <a href="#devis">Devis</a>
             <a href="#contact">Contact</a>
         </div>
@@ -769,6 +827,19 @@ $stack_wide = [
                 </div>
             </div>
         <?php endforeach; ?>
+    </div>
+</section>
+
+<section id="projets">
+    <h2 class="section-title reveal">Projets <span class="mono accent">/ à découvrir</span></h2>
+    <div class="project-grid">
+        <a class="project-card reveal reveal-delay-1" href="https://mediacli-app.web.app/updates/latest.apk" target="_blank" rel="noopener">
+            <span class="project-icon">♫</span>
+            <span>
+                <span class="project-name">Lecteur MediaCLI</span>
+                <span class="project-desc">Télécharger gratuitement</span>
+            </span>
+        </a>
     </div>
 </section>
 
